@@ -35,8 +35,8 @@ tuning — pass `--no-grab` to turn it off (see below).
 ## Install
 
 ```sh
-git clone https://github.com/jcytam/yoga-pen-linux ~/Repositories/yoga-pen-linux
-cd ~/Repositories/yoga-pen-linux
+git clone https://github.com/jcytam/yoga-pen-linux
+cd yoga-pen-linux
 ./install.sh
 ```
 

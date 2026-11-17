@@ -96,6 +96,46 @@ Two gotchas:
   `EVIOCGRAB` the Touchpad event node while it is set, release it ~0.7 s after it
   clears. The kernel drops the grab automatically if the bridge dies.
 
+## Button and tilt encoding
+
+Report `0x12` is 20 bytes, in this order:
+
+```
+12  <flags>  X(2)  Y(2)  pressure(2)  vendor(2)  serial(4)  vendor(1)  battery(1)  tiltX(2)  tiltY(2)
+```
+
+`<flags>` (byte 1), straight from the descriptor:
+
+| bit | usage | seen on this pad |
+|---|---|---|
+| 0 | Tip Switch | `0x01` when the tip is down |
+| 1 | Barrel Switch | `0x02` — the **upper** button (`BTN_STYLUS`) |
+| 2 | Eraser | never set |
+| 3 | Invert | `0x08` — the button **nearest the tip** (`BTN_TOOL_RUBBER`) |
+| 4 | vendor `0x0D/0x5A` | never set |
+| 5 | In Range | `0x20` |
+| 6-7 | vendor — `0xff00/0x44`, `0xff00/0x5a` | `0x40` / `0x80`, set alongside the matching button |
+
+Observed state changes while hovering (~2,800 reports, both buttons pressed
+separately):
+
+```
+0x20                  in range, nothing pressed
+0x40 -> 0x68          button nearest the tip  (0x40 | Invert | InRange)
+0xa2                  upper button            (Barrel | InRange | 0x80)
+0xa3                  upper button + tip down
+0x00                  out of range
+```
+
+There is no eraser tip on this pen, so the eraser people see in drawing apps is
+that near-tip button: `Invert` maps to `BTN_TOOL_RUBBER` in hid-input.
+
+Tilt is declared (`0x0D/0x3D`, `0x0D/0x3E`, 16-bit, ±9000, bytes 16-19) but the
+firmware never populates it: `TiltX` and `TiltY` were `0` in all 4,155 reports
+of a test that tilted the pen ±45° on both axes, ~70° from vertical, and then
+wrote with a normal grip. The axes exist in the report and in evdev; the values
+are always zero.
+
 ## See also
 
 Upstream bug report: [kernel Bugzilla #222273 — "[HID] Elan/Wacom 04F3:3355

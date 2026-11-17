@@ -74,9 +74,16 @@ To make a flag permanent, add it to `ExecStart=` in
   hid-input (upstream already does this for some devices). See
   [Upstream](#upstream). If a future kernel fixes it, you will see a duplicate
   pen device — disable this service.
-- **The barrel/side button does nothing.** This pad's pen reports no barrel-switch
-  bit in any HID field; measured across thousands of reports while clicking it.
-  There is nothing to map. Tip and eraser work.
+- **Both pen buttons work, in a non-obvious way.** There is no eraser tip on the
+  Yoga Pen 2. The button nearest the tip sets the pen's `Invert` usage, which
+  hid-input maps to `BTN_TOOL_RUBBER` — apps treat that as an eraser.
+  The upper button sets `Barrel Switch`, which maps to `BTN_STYLUS`. Both also
+  set a vendor bit, which nothing uses. See
+  [`docs/diagnosis.md`](docs/diagnosis.md#button-and-tilt-encoding).
+- **No tilt data.** The descriptor declares Tilt X/Y (±9000) and the kernel
+  exposes `ABS_TILT_X/Y`, but the firmware reports zero in every capture —
+  4,155 reports across a deliberate 45°/70° tilt sweep, and none of them
+  non-zero. Tilt-aware brushes behave as if the pen were always perpendicular.
 - **Scope: the pen only.** Touchpad, palm and gesture behaviour are untouched by
   this repo. While the pen is in range the touchpad is suppressed; that is the
   only interaction with it.

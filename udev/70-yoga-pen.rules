@@ -1,0 +1,7 @@
+# WACF2205 (ELAN 04F3:3355) haptic Force Pad.
+#
+# Hand the hidraw node and the touchpad event node to the logged-in seat user so
+# the Yoga Pen 2 bridge can read the pen's digitizer reports and suppress the pad
+# while the pen is in range. Adjust the vendor/product if your machine differs.
+ACTION=="add|change", SUBSYSTEM=="hidraw", ATTRS{id/vendor}=="04f3", ATTRS{id/product}=="3355", TAG+="uaccess"
+ACTION=="add|change", SUBSYSTEM=="input", ATTRS{name}=="WACF2205:00 04F3:3355 Touchpad", TAG+="uaccess"

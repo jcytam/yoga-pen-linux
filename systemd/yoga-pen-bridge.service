@@ -1,0 +1,15 @@
+[Unit]
+Description=Yoga Pen 2 bridge for the WACF2205 Force Pad
+Documentation=file:%h/.local/bin/yoga-pen-bridge.py
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/yoga-pen-bridge.py
+Restart=always
+RestartSec=3
+Nice=-5
+
+[Install]
+WantedBy=graphical-session.target

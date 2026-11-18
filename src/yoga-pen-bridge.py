@@ -126,7 +126,10 @@ def find_touchpad_event():
 
 def make_uhid():
     fd = os.open("/dev/uhid", os.O_RDWR)
-    name = b"WACF2205:00 04F3:3355 Pen"
+    # The HID name becomes the input device name and, because the descriptor
+    # carries a Battery Strength usage, the power_supply model shown in KDE's
+    # Power & Battery panel.
+    name = b"Yoga Pen 2"
     phys = b"i2c-WACF2205:00/input0"
     req = (
         struct.pack("<I", UHID_CREATE2)

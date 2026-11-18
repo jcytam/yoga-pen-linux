@@ -46,10 +46,10 @@ The pen works immediately, no logout needed. Uninstall with `./uninstall.sh`.
 
 ```sh
 # libinput sees a pen
-libinput list-devices | grep -A5 '3355 Pen'   # -> Capabilities: tablet
+libinput list-devices | grep -A5 'Yoga Pen 2'   # -> Capabilities: tablet
 
 # the kernel built the tablet node
-grep -A2 '3355 Pen' /proc/bus/input/devices   # -> BTN_TOOL_PEN, BTN_TOUCH, ABS_PRESSURE
+grep -A2 'Yoga Pen 2' /proc/bus/input/devices   # -> BTN_TOOL_PEN, BTN_TOUCH, ABS_PRESSURE
 
 # watch the bridge
 journalctl --user -u yoga-pen-bridge -f

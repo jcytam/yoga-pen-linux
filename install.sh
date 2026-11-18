@@ -49,9 +49,9 @@ for _ in 1 2 3 4 5 6 7 8 9 10; do
 done
 
 say "service: $(systemctl --user is-active yoga-pen-bridge.service)"
-if [ -r /proc/bus/input/devices ] && grep -q '04F3:3355 Pen' /proc/bus/input/devices; then
+if grep -q 'Yoga Pen 2' /proc/bus/input/devices 2>/dev/null; then
     say "pen device present:"
-    grep -A2 '04F3:3355 Pen' /proc/bus/input/devices | sed 's/^/    /'
+    grep -A2 'Yoga Pen 2' /proc/bus/input/devices | sed 's/^/    /'
 else
     say "no pen device yet - check: journalctl --user -u yoga-pen-bridge -n 30"
 fi

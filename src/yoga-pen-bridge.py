@@ -67,7 +67,13 @@ PEN_RDESC = bytes.fromhex(
     "0600ff095b16008026ff7f75108102"
     "050d095b170000008027ffffff7f75208102"
     "0600ff0900750826ff0015008102"
-    "050d093b8102"
+    # Was "05 0d 09 3b" (Battery Strength). The firmware only ever sends 0x00
+    # (pen out of range) or 0xff (in range) in this byte, so it is a presence
+    # flag, not a charge level. Re-tagged as a vendor usage (same 8 bits, so the
+    # 20-byte report layout is unchanged) to stop hid-input registering a fake
+    # battery in UPower / KDE's Power & Battery panel.
+    "0600ff093b8102"
+    "050d"  # restore the Digitizer usage page for the tilt fields below
     "6514550e16d8dc26282336d8dc4628237510093d8102093e8102"
     "c0"
     "c0"

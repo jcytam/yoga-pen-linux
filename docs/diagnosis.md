@@ -101,8 +101,16 @@ Two gotchas:
 Report `0x12` is 20 bytes, in this order:
 
 ```
-12  <flags>  X(2)  Y(2)  pressure(2)  vendor(2)  serial(4)  vendor(1)  battery(1)  tiltX(2)  tiltY(2)
+12  <flags>  X(2)  Y(2)  pressure(2)  vendor(2)  serial(4)  vendor(1)  vendor(1)  tiltX(2)  tiltY(2)
 ```
+
+The 8-bit field at byte 15 is declared as `Battery Strength` (`0x0D/0x3B`) in the
+vendor descriptor, but the firmware only ever sends `0x00` (pen out of range) or
+`0xff` (in range) — it is a presence flag, not a charge level. The bridge re-tags
+that usage as a vendor usage (same 8 bits, so this layout is unchanged) so
+hid-input does not register a fake battery; otherwise every bridge instance adds
+a `power_supply` that shows up in UPower and KDE's Power & Battery panel, reading
+100% while the pen hovers and 0% the moment it is put down.
 
 `<flags>` (byte 1), straight from the descriptor:
 

@@ -84,6 +84,11 @@ To make a flag permanent, add it to `ExecStart=` in
   exposes `ABS_TILT_X/Y`, but the firmware reports zero in every capture —
   4,155 reports across a deliberate 45°/70° tilt sweep, and none of them
   non-zero. Tilt-aware brushes behave as if the pen were always perpendicular.
+- **No battery entry in Power & Battery.** The descriptor's "Battery Strength"
+  byte is only a presence flag (`0x00` out of range, `0xff` in range), so the
+  bridge re-tags it as a vendor usage instead of letting hid-input register a
+  fake battery. The pen appears as `Yoga Pen 2` for input, not as a 0%/100%
+  device in UPower.
 - **Scope: the pen only.** Touchpad, palm and gesture behaviour are untouched by
   this repo. While the pen is in range the touchpad is suppressed; that is the
   only interaction with it.
